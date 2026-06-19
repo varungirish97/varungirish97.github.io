@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Varun Girish — RTL Design Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:              #07071c;
+      --glass:           rgba(255, 255, 255, 0.05);
+      --glass-hover:     rgba(255, 255, 255, 0.09);
+      --glass-border:    rgba(255, 255, 255, 0.1);
+      --glass-border-h:  rgba(255, 255, 255, 0.22);
+      --accent:          #c084fc;
+      --accent2:         #67e8f9;
+      --accent3:         #6ee7b7;
+      --text:            #f1f5f9;
+      --text-muted:      #94a3b8;
+      --text-faint:      #475569;
+      --radius:          16px;
+      --radius-lg:       24px;
+      --font-sans:       'Space Grotesk', 'Inter', sans-serif;
+      --font-mono:       'JetBrains Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ─────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ── Background orbs ───────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -15%;
+      right: -8%;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,132,252,0.22) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -20%;
+      left: -8%;
+      width: 750px;
+      height: 750px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(103,232,249,0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Nav ───────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: rgba(7, 7, 28, 0.55);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+    .nav-logo span { color: var(--text-muted); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── Section wrapper ───────────────────────────────────────── */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 5%;
+    }
+    section:first-of-type { padding-top: 140px; }
+
+    /* ── Section headings ──────────────────────────────────────── */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3rem;
+    }
+    .section-title span { color: var(--accent); }
+
+    /* ── Divider line ──────────────────────────────────────────── */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent) 0%, transparent 60%);
+      margin-bottom: 3rem;
+      opacity: 0.35;
+    }
+
+    /* ── HERO ──────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 32px;
+      height: 2px;
+      background: var(--accent);
+    }
+    .hero-name {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .hero-name .highlight {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-role {
+      font-size: clamp(1rem, 2.5vw, 1.375rem);
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-bottom: 1.75rem;
+      max-width: 680px;
+    }
+    .hero-bio {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .btn-primary {
+      background: rgba(192, 132, 252, 0.2);
+      color: var(--text);
+      border: 1px solid rgba(192, 132, 252, 0.45);
+    }
+    .btn-primary:hover {
+      background: rgba(192, 132, 252, 0.35);
+      box-shadow: 0 0 28px rgba(192, 132, 252, 0.4);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: var(--glass);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+    }
+    .btn-outline:hover {
+      border-color: var(--glass-border-h);
+      background: var(--glass-hover);
+      transform: translateY(-2px);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--glass-border);
+      flex-wrap: wrap;
+    }
+    .stat-item {}
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+    /* Animated cursor blink on hero */
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 4px;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── EXPERIENCE ────────────────────────────────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+      border-radius: 2px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.4rem;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px var(--accent);
+      border: 2px solid var(--bg);
+    }
+    .exp-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .exp-card:hover {
+      background: var(--glass-hover);
+      border-color: rgba(192, 132, 252, 0.3);
+      box-shadow: 0 8px 40px rgba(192, 132, 252, 0.1);
+    }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.4rem;
+    }
+    .exp-company {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .exp-date {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: rgba(192, 132, 252, 0.1);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid rgba(192, 132, 252, 0.25);
+      white-space: nowrap;
+    }
+    .exp-role {
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .exp-bullets li {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      padding-left: 1.25rem;
+      position: relative;
+      line-height: 1.6;
+    }
+    .exp-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.75rem;
+      top: 0.1rem;
+    }
+    .exp-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.1rem;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid var(--glass-border);
+      color: var(--text-faint);
+      background: var(--glass);
+    }
+
+    /* ── PROJECTS ──────────────────────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .project-card:hover {
+      border-color: rgba(103, 232, 249, 0.3);
+      box-shadow: 0 8px 40px rgba(103, 232, 249, 0.1);
+      background: var(--glass-hover);
+      transform: translateY(-4px);
+    }
+    .project-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(103, 232, 249, 0.1);
+      border: 1px solid rgba(103, 232, 249, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+    .project-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .project-date {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      margin-bottom: 0.85rem;
+    }
+    .project-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.25rem;
+    }
+    .stack-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      color: var(--accent2);
+      background: rgba(103, 232, 249, 0.08);
+      border: 1px solid rgba(103, 232, 249, 0.2);
+    }
+
+    /* ── SKILLS ────────────────────────────────────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .skills-group {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .skills-group:hover {
+      border-color: rgba(110, 231, 183, 0.3);
+      background: var(--glass-hover);
+    }
+    .skills-group-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent3);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .skills-group-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--glass-border);
+    }
+    .skill-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 8px;
+      background: rgba(110, 231, 183, 0.07);
+      border: 1px solid rgba(110, 231, 183, 0.18);
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .chip:hover {
+      background: rgba(110, 231, 183, 0.14);
+      color: var(--accent3);
+      border-color: rgba(110, 231, 183, 0.4);
+    }
+
+    /* ── EDUCATION ─────────────────────────────────────────────── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+      gap: 1.5rem;
+    }
+    .edu-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .edu-card:hover {
+      border-color: rgba(192, 132, 252, 0.3);
+      background: var(--glass-hover);
+      box-shadow: 0 8px 40px rgba(192, 132, 252, 0.08);
+    }
+    .edu-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(192, 132, 252, 0.1);
+      border: 1px solid rgba(192, 132, 252, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .edu-degree {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .edu-school {
+      font-size: 0.875rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    .edu-date {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-faint);
+    }
+    .edu-detail {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.6rem;
+      line-height: 1.55;
+    }
+
+    /* ── PUBLICATION ───────────────────────────────────────────── */
+    .pub-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-left: 3px solid var(--accent2);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .pub-icon { font-size: 1.5rem; }
+    .pub-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+    .pub-text strong { color: var(--text); }
+
+    /* ── HOBBIES ───────────────────────────────────────────────── */
+    .hobbies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .hobby-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+    .hobby-card:hover {
+      border-color: rgba(192, 132, 252, 0.3);
+      background: var(--glass-hover);
+      box-shadow: 0 8px 32px rgba(192, 132, 252, 0.1);
+      transform: translateY(-4px);
+    }
+    .hobby-emoji {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .hobby-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .hobby-desc {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── CONTACT ───────────────────────────────────────────────── */
+    #contact {
+      text-align: center;
+    }
+    .contact-inner {
+      background: var(--glass);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 3.5rem 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-inner::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(192,132,252,0.15), transparent 70%);
+      pointer-events: none;
+    }
+    .contact-inner::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(103,232,249,0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .contact-headline {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .contact-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ────────────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 5%;
+      border-top: 1px solid var(--glass-border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-faint);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── Scroll fade-in ────────────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      section { padding: 80px 1.25rem; }
+      .hero-stats { gap: 1.5rem; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .edu-card { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" href="#hero">VG<span>.portfolio</span></a>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#life">Life</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-eyebrow">San Jose, CA</div>
+  <h1 class="hero-name">
+    <span class="highlight">Varun</span><br />Girish<span class="cursor"></span>
+  </h1>
+  <p class="hero-role">RTL Designer. Tech enthusiast. Perpetual learner.</p>
+  <p class="hero-bio">
+    By day I work on RTL design and digital hardware. Outside of work, I'm just someone who
+    loves technology and gets genuinely excited by it — whether that's tinkering with a
+    Raspberry Pi, experimenting with AI, or picking up whatever new thing caught my eye that week.
+  </p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="mailto:varun97girish@gmail.com">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Get in touch
+    </a>
+    <a class="btn btn-outline" href="https://linkedin.com/in/varun-girish" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-number">5+</div>
+      <div class="stat-label">Years of Experience</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">MS</div>
+      <div class="stat-label">Computer Engineering, USC</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ────────────────────────────────────────────────── -->
+<section id="experience">
+  <p class="section-label fade-in">// work experience</p>
+  <h2 class="section-title fade-in">Where I've <span>Worked</span></h2>
+  <div class="section-divider fade-in"></div>
+
+  <div class="timeline">
+
+    <div class="timeline-item fade-in">
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-company">Apple Inc.</div>
+          <div class="exp-date">Jul 2021 — Present</div>
+        </div>
+        <div class="exp-role">RTL Design Engineer · Cupertino, CA</div>
+        <ul class="exp-bullets">
+          <li>Designed high-speed deep sub-micron DSP hardware — fixed-point datapath and control logic for signal processing applications, meeting stringent timing and area targets.</li>
+          <li>Developed RTL for a Fast Fourier Transform (FFT) block optimized for power, performance, and area (PPA). Performed waveform debugging with Synopsys Verdi and Cadence Indago.</li>
+          <li>Developed RTL for the CD2DB block in the Control/MAC layer, implementing new features and resolving functional failures via waveform analysis.</li>
+          <li>Built FFT algorithm reference models in C++ for functional verification and performance validation.</li>
+          <li>Performed logic synthesis with Cadence Genus and power estimation with Synopsys PPRTL — implemented clock-gating optimizations achieving a <strong style="color:var(--accent)">17% power reduction</strong>.</li>
+          <li>Drove code coverage from 70% → 100% using VCStatic: analyzed line, branch, toggle and FSM reports, wrote targeted testcases, and collaborated with formal verification to debug assertion failures.</li>
+          <li>Built custom AI agents using Claude to automate RTL lint execution, intelligent log analysis, and context-aware fix suggestions — significantly improving debugging efficiency.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="tag">SystemVerilog</span>
+          <span class="tag">Synopsys Verdi</span>
+          <span class="tag">Cadence Indago</span>
+          <span class="tag">Cadence Genus</span>
+          <span class="tag">SpyGlass</span>
+          <span class="tag">VCStatic</span>
+          <span class="tag">C++</span>
+          <span class="tag">Python</span>
+          <span class="tag">Claude Code</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item fade-in">
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-company">AMD</div>
+          <div class="exp-date">Jan 2021 — May 2021</div>
+        </div>
+        <div class="exp-role">Design Verification Intern · Santa Clara, CA</div>
+        <ul class="exp-bullets">
+          <li>Performed functional verification for the Decode block of a next-gen CPU core — debugged regression failures using Verdi waveform analysis and identified RTL bugs.</li>
+          <li>Analyzed microarchitecture specifications, wrote SystemVerilog assertions, cleaned testbench code, and developed Python scripts to streamline the verification workflow.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="tag">SystemVerilog</span>
+          <span class="tag">SV Assertions</span>
+          <span class="tag">Synopsys Verdi</span>
+          <span class="tag">Python</span>
+          <span class="tag">CPU Microarchitecture</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item fade-in">
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-company">USC — Course Producer</div>
+          <div class="exp-date">Aug 2020 — Dec 2020</div>
+        </div>
+        <div class="exp-role">CSCI 356: Introduction to Computer Systems</div>
+        <ul class="exp-bullets">
+          <li>Delivered lab sessions to undergraduate students on computer systems organisation and held office hours under Prof. Mark Redekopp and Prof. Marco Paolieri.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item fade-in">
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-company">Analog Devices</div>
+          <div class="exp-date">Jan 2019 — Jul 2019</div>
+        </div>
+        <div class="exp-role">Firmware Engineering Intern · Bangalore, India</div>
+        <ul class="exp-bullets">
+          <li>Developed firmware for an ARM-based device integrated with the ADE9000 power monitor to collect data center power usage metrics. Used IAR Embedded Workbench for programming and debugging.</li>
+          <li>Spearheaded building and testing the prototype end-to-end using C and Python.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="tag">ARM</span>
+          <span class="tag">Embedded C</span>
+          <span class="tag">Python</span>
+          <span class="tag">IAR Embedded Workbench</span>
+          <span class="tag">ADE9000</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PROJECTS ──────────────────────────────────────────────────── -->
+<section id="projects">
+  <p class="section-label fade-in">// academic projects</p>
+  <h2 class="section-title fade-in">What I've <span>Built</span></h2>
+  <div class="section-divider fade-in"></div>
+
+  <div class="projects-grid">
+
+    <div class="project-card fade-in">
+      <div class="project-icon">⚙️</div>
+      <div class="project-title">32-bit Out-of-Order (Tomasulo) CPU</div>
+      <div class="project-date">June 2020</div>
+      <div class="project-desc">
+        Implemented a full Tomasulo CPU with out-of-order execution and speculative execution beyond branches with in-order commitment.
+        Designed copy-free checkpointing (CFC), Reorder Buffer (ROB), Branch Prediction Buffer (BPB), Free Register List (FRL),
+        Store Address Buffer (SAB), Issue Unit, and Dispatch Unit in RTL. Synthesized and implemented on the NEXYS4 Artix-7 FPGA.
+      </div>
+      <div class="project-stack">
+        <span class="stack-tag">Verilog</span>
+        <span class="stack-tag">QuestaSim</span>
+        <span class="stack-tag">Xilinx Vivado</span>
+        <span class="stack-tag">FPGA</span>
+      </div>
+    </div>
+
+    <div class="project-card fade-in">
+      <div class="project-icon">🔲</div>
+      <div class="project-title">Chip Multiprocessor Design</div>
+      <div class="project-date">June 2020</div>
+      <div class="project-desc">
+        Analyzed fine-grain multi-threading in a multi-core, multi-threaded processor using MOESI cache coherency protocol.
+        Wrote an Assembly program to perform parallel matrix multiplication on a 4-core, 4-threaded CMP using load-link and store-conditional (LL/SC) instructions.
+      </div>
+      <div class="project-stack">
+        <span class="stack-tag">Assembly</span>
+        <span class="stack-tag">QuestaSim</span>
+        <span class="stack-tag">MOESI Protocol</span>
+        <span class="stack-tag">Multi-threading</span>
+      </div>
+    </div>
+
+    <div class="project-card fade-in">
+      <div class="project-icon">🔄</div>
+      <div class="project-title">Pipelined RISC-5 CPU</div>
+      <div class="project-date">March 2020</div>
+      <div class="project-desc">
+        Designed a 5-stage pipelined RISC CPU (IF, ID, EX, MEM, WB) in Verilog supporting R-type, I-type, and J-type instructions
+        with full pipelined control logic. Implemented a Hazard Detection Unit and Forwarding Unit to catch and resolve
+        RAW hazards with minimal performance penalty.
+      </div>
+      <div class="project-stack">
+        <span class="stack-tag">Verilog</span>
+        <span class="stack-tag">QuestaSim</span>
+        <span class="stack-tag">Pipeline Design</span>
+        <span class="stack-tag">Hazard Resolution</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Publication -->
+  <div class="pub-card fade-in" style="margin-top:2rem;">
+    <div class="pub-icon">📄</div>
+    <div class="pub-text">
+      <strong>Publication —</strong> "Mobile Gesture Controlled Car,"
+      <em>International Journal of Innovative Research in Electrical Engineering</em>, 2018.
+    </div>
+  </div>
+</section>
+
+<!-- ── SKILLS ────────────────────────────────────────────────────── -->
+<section id="skills">
+  <p class="section-label fade-in">// technical skills</p>
+  <h2 class="section-title fade-in">Tools of the <span>Trade</span></h2>
+  <div class="section-divider fade-in"></div>
+
+  <div class="skills-grid">
+
+    <div class="skills-group fade-in">
+      <div class="skills-group-title">Languages</div>
+      <div class="skill-chips">
+        <span class="chip">SystemVerilog</span>
+        <span class="chip">C++</span>
+        <span class="chip">C</span>
+        <span class="chip">Python</span>
+        <span class="chip">Verilog</span>
+        <span class="chip">Assembly</span>
+      </div>
+    </div>
+
+    <div class="skills-group fade-in">
+      <div class="skills-group-title">Simulation & Debug</div>
+      <div class="skill-chips">
+        <span class="chip">Synopsys VCS</span>
+        <span class="chip">Synopsys Verdi</span>
+        <span class="chip">Cadence Indago</span>
+        <span class="chip">ModelSim</span>
+        <span class="chip">QuestaSim</span>
+      </div>
+    </div>
+
+    <div class="skills-group fade-in">
+      <div class="skills-group-title">Synthesis & Analysis</div>
+      <div class="skill-chips">
+        <span class="chip">Cadence Genus</span>
+        <span class="chip">Synopsys PPRTL</span>
+        <span class="chip">Synopsys SpyGlass</span>
+        <span class="chip">VCStatic</span>
+      </div>
+    </div>
+
+    <div class="skills-group fade-in">
+      <div class="skills-group-title">Design & Layout</div>
+      <div class="skill-chips">
+        <span class="chip">Cadence Virtuoso</span>
+        <span class="chip">Xilinx Vivado</span>
+        <span class="chip">FPGA Implementation</span>
+      </div>
+    </div>
+
+    <div class="skills-group fade-in">
+      <div class="skills-group-title">Other Tools</div>
+      <div class="skill-chips">
+        <span class="chip">Matlab</span>
+        <span class="chip">VSCode</span>
+        <span class="chip">Claude Code</span>
+        <span class="chip">IAR Embedded Workbench</span>
+        <span class="chip">Git</span>
+      </div>
+    </div>
+
+    <div class="skills-group fade-in">
+      <div class="skills-group-title">Domain Expertise</div>
+      <div class="skill-chips">
+        <span class="chip">RTL Design</span>
+        <span class="chip">Design Verification</span>
+        <span class="chip">DSP Hardware</span>
+        <span class="chip">FFT Design</span>
+        <span class="chip">CPU Microarchitecture</span>
+        <span class="chip">Code Coverage</span>
+        <span class="chip">AI Agents</span>
+        <span class="chip">Firmware</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── EDUCATION ─────────────────────────────────────────────────── -->
+<section id="education">
+  <p class="section-label fade-in">// education</p>
+  <h2 class="section-title fade-in">Academic <span>Background</span></h2>
+  <div class="section-divider fade-in"></div>
+
+  <div class="edu-grid">
+
+    <div class="edu-card fade-in">
+      <div class="edu-icon">🎓</div>
+      <div>
+        <div class="edu-degree">M.S. Computer Engineering</div>
+        <div class="edu-school">University of Southern California — Los Angeles</div>
+        <div class="edu-date">Aug 2019 – May 2021</div>
+        <div class="edu-detail">
+          Coursework: Digital System Design, VLSI System Design I &amp; II, Advanced Microarchitecture, Integrated Memory Devices, Computer Systems Organization, MOS VLSI Circuits.
+        </div>
+      </div>
+    </div>
+
+    <div class="edu-card fade-in">
+      <div class="edu-icon">🎓</div>
+      <div>
+        <div class="edu-degree">B.E. Electronics &amp; Communication Engineering</div>
+        <div class="edu-school">BMS College of Engineering — Bangalore, India</div>
+        <div class="edu-date">June 2015 – May 2019</div>
+        <div class="edu-detail">
+          Published research on gesture-controlled embedded systems during undergraduate studies.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── HOBBIES ────────────────────────────────────────────────────── -->
+<section id="life">
+  <p class="section-label fade-in">// outside the terminal</p>
+  <h2 class="section-title fade-in">There's a <span>Human</span> Here Too</h2>
+  <div class="section-divider fade-in"></div>
+
+  <div class="hobbies-grid">
+
+    <div class="hobby-card fade-in">
+      <div class="hobby-emoji">⛰️</div>
+      <div class="hobby-title">Hiking</div>
+      <div class="hobby-desc">Happiest when the trail has no signal and the view has no filter. Nature is basically the best debugger — clears everything.</div>
+    </div>
+
+    <div class="hobby-card fade-in">
+      <div class="hobby-emoji">⚽</div>
+      <div class="hobby-title">Football</div>
+      <div class="hobby-desc">Play it, watch it, argue about it passionately. Emotions run high, logic goes out the window.</div>
+    </div>
+
+    <div class="hobby-card fade-in">
+      <div class="hobby-emoji">🎸</div>
+      <div class="hobby-title">Playing Guitar</div>
+      <div class="hobby-desc">Six strings, zero bugs. The only place where getting lost in the middle is actually the point.</div>
+    </div>
+
+    <div class="hobby-card fade-in">
+      <div class="hobby-emoji">🎧</div>
+      <div class="hobby-title">Music</div>
+      <div class="hobby-desc">Bollywood to Rock, Kannada to Pop — it's all fair game. Instrumentals go on when it's time to actually get work done.</div>
+    </div>
+
+    <div class="hobby-card fade-in">
+      <div class="hobby-emoji">✈️</div>
+      <div class="hobby-title">Travelling</div>
+      <div class="hobby-desc">New places, new food, new perspectives. Always planning the next trip.</div>
+    </div>
+
+    <div class="hobby-card fade-in">
+      <div class="hobby-emoji">🎲</div>
+      <div class="hobby-title">Game Night</div>
+      <div class="hobby-desc">Big fan of games that somehow turn friends into enemies by round two. The more chaos it brings to the group, the better.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ───────────────────────────────────────────────────── -->
+<section id="contact">
+  <p class="section-label fade-in">// contact</p>
+  <h2 class="section-title fade-in">Let's <span>Connect</span></h2>
+
+  <div class="contact-inner fade-in">
+    <div class="contact-headline">Say hello 👋</div>
+    <p class="contact-sub">
+      Whether it's a conversation about chips, hardware design, AI tooling, or just a good coffee chat — I'm always happy to connect.
+    </p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:varun97girish@gmail.com">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        varun97girish@gmail.com
+      </a>
+      <a class="btn btn-outline" href="https://linkedin.com/in/varun-girish" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────────── -->
+<footer>
+  <p>Built with ♥ · <a href="#hero">↑ Back to top</a></p>
+</footer>
+
+<!-- ── Scroll Animation Script ──────────────────────────────────── -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 80}ms`;
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
